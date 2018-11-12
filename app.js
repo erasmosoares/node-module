@@ -26,3 +26,14 @@ fs.readdir('./',function(err,files){
 });
 
 log(files);
+
+//Events
+const EventEmitter = require('events');
+const emitter = new EventEmitter();
+
+//Register
+emitter.on('messageLogged',function(){
+    log('Listenner called');
+});
+
+emitter.emit('messageLogged');
