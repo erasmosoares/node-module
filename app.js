@@ -7,8 +7,6 @@ logger.on('messageLogged',(arg)=>{
     console.log('Listenner called',arg);
 });
 
-logger.log('hey');
-
 // Give path information
 const path = require('path'); 
 var pathObj = path.parse(__filename);
@@ -32,3 +30,5 @@ fs.readdir('./',function(err,files){
 });
 
 logger.log(files);
+
+
