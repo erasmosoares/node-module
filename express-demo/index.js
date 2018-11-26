@@ -26,16 +26,10 @@ app.get('/api/courses',(req,res)=>{
 });
 
 app.post('/api/courses',(req,res)=>{
-    const schema = {
-        name: Joi.string().min(3).required()
-    };
-
-    const result = Joi.validate(req.body, schema);
-    console.log(result);
-
-    if(result.error){
-       res.status(400).send(result.error.details[0].message);
-    }
+    const { error } = validateCourse(req.body); //result.error -> obj destructure -> same as -> const result = validateCourse(req.body);
+    if(error){
+        res.status(400).send(result.error.details[0].message);
+     }
 
     /*
     if(!req.body.name || req.body.name.length < 3){
@@ -56,7 +50,6 @@ app.post('/api/courses',(req,res)=>{
 //http://localhost:3000/api/courses/1
 app.get('/api/courses/:id',(req,res) =>{
     const course = courses.find(c => c.id === parseInt(req.params.id));
-    
     if(!course) res.status(404).send('The course with the given id was not found');
     res.send(course);
 });
@@ -65,6 +58,35 @@ app.get('/api/courses/:id',(req,res) =>{
 app.get('/api/posts/:year/:month',(req,res) =>{
     res.send(req.params); //req.query
 });
+
+app.put('/api/courses/:id',(req,res) =>{
+    //Look up the course
+    //If not existing, return 404
+    const course = courses.find(c => c.id === parseInt(req.params.id));
+    if(!course) res.status(404).send('The course with the given id was not found');
+
+    //Validate
+    //If invalid, return 400 - Bad request
+    const result = validateCourse(req.body);
+    const { error } = validateCourse(req.body); //result.error -> obj destructure -> same as -> const result = validateCourse(req.body);
+    if(error){
+        res.status(400).send(result.error.details[0].message);
+     }
+
+    //Update course
+    course.name = req.body.name;
+
+    //Return the updated course
+    res.send(course);
+
+});
+
+function validateCourse(course){
+    const schema = {
+        name: Joi.string().min(3).required()
+    };
+    return Joi.validate(course, schema);
+}
 
 // PORT
 const port = process.env.PORT || 3000;
