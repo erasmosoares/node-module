@@ -4,20 +4,18 @@ const express = require('express');
 const app = express();
 
 //middleware function
-app.use(express.json());
+app.use(express.json()); //parse body - req.body
+app.use(express.urlencoded({extended: true})); //key=value read x-wwww-form-urlecoded (key:name value:my course)
+app.use(express.static('public'));
 
+//custom middleware function
 app.use(logger);
-
-app.use(function(req,res,next){
-  console.log('Authenticating...');
-  next();
-});
 
 const genres = [
   { id: 1, name: 'Action' },  
   { id: 2, name: 'Horror' },  
   { id: 3, name: 'Romance' },  
-];
+]; 
 
 app.get('/api/genres', (req, res) => {
   res.send(genres);
