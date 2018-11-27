@@ -1,8 +1,17 @@
+const logger = require('./logger');
 const Joi = require('joi');
 const express = require('express');
 const app = express();
 
+//middleware function
 app.use(express.json());
+
+app.use(logger);
+
+app.use(function(req,res,next){
+  console.log('Authenticating...');
+  next();
+});
 
 const genres = [
   { id: 1, name: 'Action' },  
