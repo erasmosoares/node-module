@@ -1,13 +1,29 @@
+const config = require('config'); //config file
 const helmet = require('helmet');
-const morgan = require('morgan');
+const morgan = require('morgan'); //Logging
 //Pascal name for classes
-const Joi = require('joi');
+const Joi = require('joi'); //error validator
 const express = require('express');
 const app = express();
 
+console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
+console.log(`app:${app.get('env')}`);
+
 app.use(express.json());
 app.use(helmet());
-app.use(morgan('tiny'));
+
+// set password=123
+console.log(`Application Name: ${config.get('name')} `);
+console.log(`Mail Server: ${config.get('mail.host')} `);
+//console.log(`Mail Password: ${config.get('mail.app_password')} `);
+
+// $set NODE_ENV=production
+
+if(app.get('env') === 'development'){
+    app.use(morgan('tiny'));
+    console.log('Morgan enabled...');
+}
+
 
 const courses = [
     { id:1, name:'course 1'},
