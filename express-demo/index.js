@@ -1,3 +1,6 @@
+const startupDebugger = require('debug')('app:startup');
+const dbDebugger = require('debug')('app:db');
+
 const config = require('config'); //config file
 const helmet = require('helmet');
 const morgan = require('morgan'); //Logging
@@ -8,7 +11,7 @@ const app = express();
 
 console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
 console.log(`app:${app.get('env')}`);
-
+ 
 app.use(express.json());
 app.use(helmet());
 
@@ -21,9 +24,10 @@ console.log(`Mail Server: ${config.get('mail.host')} `);
 
 if(app.get('env') === 'development'){
     app.use(morgan('tiny'));
-    console.log('Morgan enabled...');
+    startupDebugger('Morgan enabled...');
 }
 
+dbDebugger('Database debugger...');
 
 const courses = [
     { id:1, name:'course 1'},
