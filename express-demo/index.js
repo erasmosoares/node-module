@@ -1,9 +1,13 @@
+const helmet = require('helmet');
+const morgan = require('morgan');
 //Pascal name for classes
 const Joi = require('joi');
 const express = require('express');
 const app = express();
 
 app.use(express.json());
+app.use(helmet());
+app.use(morgan('tiny'));
 
 const courses = [
     { id:1, name:'course 1'},
