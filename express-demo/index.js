@@ -9,6 +9,9 @@ const Joi = require('joi'); //error validator
 const express = require('express');
 const app = express();
 
+app.set('view engine','pug');
+app.set('views','./views');
+
 console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
 console.log(`app:${app.get('env')}`);
  
@@ -42,7 +45,8 @@ app.delete();
 */
 
 app.get('/',(req,res)=>{
-    res.send('Hello World!');
+    //res.send('Hello World!');
+    res.render('index',{ title: 'My Express App',message:'Hello'});
 });
 
 app.get('/api/courses',(req,res)=>{
