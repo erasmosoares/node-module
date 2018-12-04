@@ -1,27 +1,27 @@
-const logger = require('./logger');
-const Joi = require('joi');
 const express = require('express');
-const app = express();
+const router = express.Router();
+//const logger = require('./middleware/logger');
+const Joi = require('joi');
 
 //middleware function
-app.use(express.json()); //parse body - req.body
-app.use(express.urlencoded({extended: true})); //key=value read x-wwww-form-urlecoded (key:name value:my course)
-app.use(express.static('public'));
+router.use(express.json()); //parse body - req.body
+router.use(express.urlencoded({extended: true})); //key=value read x-wwww-form-urlecoded (key:name value:my course)
+router.use(express.static('public'));
 
 //custom middleware function
-app.use(logger);
+//router.use(logger);
 
-const genres = [
+const genres = [ 
   { id: 1, name: 'Action' },  
   { id: 2, name: 'Horror' },  
   { id: 3, name: 'Romance' },  
 ]; 
 
-app.get('/api/genres', (req, res) => {
+router.get('/', (req, res) => {
   res.send(genres);
 });
 
-app.post('/api/genres', (req, res) => {
+router.post('/', (req, res) => {
   const { error } = validateGenre(req.body); 
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -33,7 +33,7 @@ app.post('/api/genres', (req, res) => {
   res.send(genre);
 });
 
-app.put('/api/genres/:id', (req, res) => {
+router.put('/:id', (req, res) => {
   const genre = genres.find(c => c.id === parseInt(req.params.id));
   if (!genre) return res.status(404).send('The genre with the given ID was not found.');
 
@@ -44,7 +44,7 @@ app.put('/api/genres/:id', (req, res) => {
   res.send(genre);
 });
 
-app.delete('/api/genres/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
   const genre = genres.find(c => c.id === parseInt(req.params.id));
   if (!genre) return res.status(404).send('The genre with the given ID was not found.');
 
@@ -54,7 +54,7 @@ app.delete('/api/genres/:id', (req, res) => {
   res.send(genre);
 });
 
-app.get('/api/genres/:id', (req, res) => {
+router.get('/:id', (req, res) => {
   const genre = genres.find(c => c.id === parseInt(req.params.id));
   if (!genre) return res.status(404).send('The genre with the given ID was not found.');
   res.send(genre);
@@ -68,5 +68,4 @@ function validateGenre(genre) {
   return Joi.validate(genre, schema);
 }
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`Listening on port ${port}...`));
+module.exports = router;
