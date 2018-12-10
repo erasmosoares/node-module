@@ -23,6 +23,20 @@ getUser(1)
 .then(user => getRepositories(user.gitHubUsername))
 .catch(err => console.log('Error',err.message));
 
+// Async and Await approach
+async function displayCommits(){
+    try{
+        const user = await getUser(1);
+        const repos = await getRepositories(user.gitHubUsername);
+        const commits = await getCommits(repos);
+        console.log(commits);
+    }
+    catch(err){
+        console.log('Error',err.message);
+    }
+}
+
+
 function getRepositories(username){
     return new Promise((resolve,reject)=>{
         setTimeout(()=>{
