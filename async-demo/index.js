@@ -1,5 +1,4 @@
-console.log('Before');
-getUser(1, getRepositories);
+//getUser(1, getRepositories);
 
 function getRepositories(user){
     getRepositories(user.gitHubUsername,getCommits);
@@ -10,7 +9,6 @@ function getCommits(repos){
 function displayCommits(commits){
     console.log(commits);
 }
-console.log('After');
 
 function getUser(id){
     return new Promise((resolve,reject)=>{
@@ -21,6 +19,10 @@ function getUser(id){
     });
 }
 
+getUser(1)
+.then(user => getRepositories(user.gitHubUsername))
+.catch(err => console.log('Error',err.message));
+
 function getRepositories(username){
     return new Promise((resolve,reject)=>{
         setTimeout(()=>{
@@ -29,16 +31,3 @@ function getRepositories(username){
         },2000);
     });
 }
-/*console.log('Before');
-getUser(1, (user) =>{
-    console.log('User',user);
-});
-console.log(user);
-console.log('After');
-
-function getUser(id, callback){
-    setTimeout(()=>{
-        console.log('Reading a user from a database...');
-        callback({ id:id, gitHubUsername:'erasmo'});
-    },2000);
-}*/
