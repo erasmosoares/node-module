@@ -35,15 +35,30 @@ async function createCourse(){
 //lte (less than or equal to)
 //in
 //nin (not in)
+// Logical operators
+//or
+//and
 
+// /api/courses?pageNumber=2&pageSize=10
 async function getCourses(){
+    const pageNumber = 2;
+    const pageSize = 10;
+
 //    const courses = await Course.find();
     const courses = await Course
     //.find({author:'Esaj', isPublished:true})
     //.find({price: 10})
     //.find({price: {$gt:10, $lte: 20}})
-    .find({price: {$in:[10,15,30]}})
-    .limit(10)
+    //.find({price: {$in:[10,15,30]}})
+    //.find()
+    //.or([{author:'Esaj'},{isPublished:true}])
+    //.and([{author:'Esaj'},{isPublished:true}])
+    //Starts with Es (regular expression)
+    .find({author:/^Es/})
+    .find({author:/aj$/}) //ends with
+    .find({author:/.*sa.*/}) //Middle of
+    .skip((pageNumber - 1)*pageSize)
+    .limit(pageSize)
     .sort({name:1}) //1=ascending -1=descending
     .select({name:1,tags:1});
     
