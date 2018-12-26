@@ -4,12 +4,31 @@ mongoose.connect('mongodb://localhost/mongo-exercises',{ useNewUrlParser: true }
 
 const courseSchema = new mongoose.Schema({
   _id:String,
-  name: {type: String, required: true},
+  name: {
+    type: String, 
+    required: true,
+    minlength:5,
+    maxlength:255
+  },
+  category:{
+    type:String,
+    enum:['web','mobile','network']
+  },
   author: String, 
-  tags: [ String ],
+  tags: {
+    type: Array,
+    validate: function(v){
+      return v &&  v.length > 0;
+    },
+    message: 'A course should have at least one tag.'
+  },
   date: Date, 
   isPublished: Boolean,
-  price: Number
+  price:{
+    type: Number,
+    required: function(){
+      return this.isPublished;
+    }}
 });
 
 const Course = mongoose.model('Course', courseSchema);
@@ -44,10 +63,12 @@ async function deleteCourse(id){
 async function createCourse(){
 
   const course = new Course({
-      //name:'Angular Course',
+      name:'Angular Course',
       author:'Esaj',
       tags:['angular 2','bootstrap'],
-      isPublished:true
+      isPublished:true,
+      category: 'web',
+      price: 15
   });
   
   try {
