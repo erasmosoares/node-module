@@ -4,7 +4,7 @@ mongoose.connect('mongodb://localhost/mongo-exercises',{ useNewUrlParser: true }
 
 const courseSchema = new mongoose.Schema({
   _id:String,
-  name: String,
+  name: {type: String, required: true},
   author: String, 
   tags: [ String ],
   date: Date, 
@@ -35,13 +35,31 @@ async function updateCourse(id){
   console.log(result);
 }
 
-async function removeCourse(id){
+async function deleteCourse(id){
   // const result = await Course.deleteOne({_id:id });
   const result = await Course.findOneAndDelete({_id:id });
   console.log(result);
 }
 
+async function createCourse(){
+
+  const course = new Course({
+      //name:'Angular Course',
+      author:'Esaj',
+      tags:['angular 2','bootstrap'],
+      isPublished:true
+  });
+  
+  try {
+    const result = await course.save();
+    console.log(result);  
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+
+createCourse();
 //run();
-removeCourse('5a68fdc3615eda645bc6bdec');
+//deleteCourse('5a68fdc3615eda645bc6bdec');
 
 
