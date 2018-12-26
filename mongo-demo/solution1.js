@@ -33,10 +33,15 @@ async function updateCourse(id){
     { $set:{ isPublished: false, author: 'Erasmo'}
   });
   console.log(result);
+}
 
+async function removeCourse(id){
+  // const result = await Course.deleteOne({_id:id });
+  const result = await Course.findOneAndDelete({_id:id });
+  console.log(result);
 }
 
 //run();
-updateCourse('5a68fdc3615eda645bc6bdec');
+removeCourse('5a68fdc3615eda645bc6bdec');
 
 
