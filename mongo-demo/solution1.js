@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/mongo-exercises');
+mongoose.connect('mongodb://localhost/mongo-exercises',{ useNewUrlParser: true });
 
 const courseSchema = new mongoose.Schema({
+  _id:String,
   name: String,
   author: String, 
   tags: [ String ],
@@ -25,4 +26,17 @@ async function run() {
   console.log(courses);
 }
 
-run();
+async function updateCourse(id){
+  // Approach update first
+  const result = await Course.updateOne(
+    {_id:id },
+    { $set:{ isPublished: false, author: 'Erasmo'}
+  });
+  console.log(result);
+
+}
+
+//run();
+updateCourse('5a68fdc3615eda645bc6bdec');
+
+
