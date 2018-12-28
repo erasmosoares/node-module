@@ -12,13 +12,21 @@ const courseSchema = new mongoose.Schema({
   },
   category:{
     type:String,
-    enum:['web','mobile','network']
+    required: true,
+    enum:['web','mobile','network'],
+    lowercase:true
   },
   author: String, 
   tags: {
     type: Array,
-    validate: function(v){
-      return v &&  v.length > 0;
+    validate:{
+      isAsync: true,
+      validator: function(v,callback){
+        setTimeout(()=>{
+          const result = v &&  v.length > 0;
+          callback(result);
+        },4000)
+      },
     },
     message: 'A course should have at least one tag.'
   },
@@ -28,7 +36,11 @@ const courseSchema = new mongoose.Schema({
     type: Number,
     required: function(){
       return this.isPublished;
-    }}
+    }},
+    min: 10,
+    max: 200,
+    get: v => Math.round(v),
+    set: v => Math.round(v),
 });
 
 const Course = mongoose.model('Course', courseSchema);
@@ -65,17 +77,18 @@ async function createCourse(){
   const course = new Course({
       name:'Angular Course',
       author:'Esaj',
-      tags:['angular 2','bootstrap'],
+      tags:['frontend'],
       isPublished:true,
-      category: 'web',
-      price: 15
+      category: 'Web',
+      price: 15.8
   });
   
   try {
     const result = await course.save();
     console.log(result);  
-  } catch (error) {
-    console.log(error.message)
+  } catch (ex) {
+    for(field in ex.errors)
+      console.log(ex.errors[field].message)
   }
 }
 

@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const startupDebugger = require('debug')('app:startup');
 const dbDebugger = require('debug')('app:db');
 const config = require('config'); //config file
@@ -8,6 +9,10 @@ const genre = require('./routes/genres')
 const home = require('./routes/home');
 const express = require('express');
 const app = express();
+
+mongoose.connect('mongodb://localhost/vidly',{ useNewUrlParser: true })
+.then(()=>console.log('Connected to MongoDb...'))
+.catch(()=>console.error('Could not connect to MongoDb...'));
 
 app.set('view engine','pug'); 
 app.set('views','./views');
