@@ -7,6 +7,7 @@ const morgan = require('morgan'); //Logging
 const course = require('./routes/courses');
 const genre = require('./routes/genres')
 const home = require('./routes/home');
+const customers = require('./routes/customers');
 const express = require('express');
 const app = express();
 
@@ -19,6 +20,7 @@ app.set('views','./views');
 
 app.use('/api/courses',course);
 app.use('/api/genres',genre);
+app.use('/api/customers',customers);
 app.use('/',home);
 
 console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
